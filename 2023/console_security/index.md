@@ -37,6 +37,7 @@ The main references I will be using are:
 :::::::::::::: {.columns}
 ::: {.column width="40%"}
 
+- What is a Console?
 - Hardware Security Assumptions
 - Nintendo Wii
   - System Architecture
@@ -68,6 +69,12 @@ The main references I will be using are:
 - MC146818 RTC/CMOS
 - ISA bus
 - VGA
+
+---
+
+## What is a Game Console?
+
+### _Not a PC._
 
 ---
 
