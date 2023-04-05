@@ -164,13 +164,13 @@ Common in lots of modern hardware:
 
 ## Wii: Starlet vs. Broadway
 
-Broadway (IBM PowerPC (PPC))
+**Broadway (IBM PowerPC (PPC))**
 
 - It’s where the games (and System Menu) run.
 - Runs a Operating System called Revolution OS.
 - Controlled by Starlet.
 
-Starlet (ARM)
+**Starlet (ARM)**
 
 - It’s where the main “operating system” (IOS) runs.
 - Connected to hardware.
@@ -441,7 +441,7 @@ Nothing Notable.
 - Modern ones need regular internet access to work (\*).
 - Generally the same hardware (maybe more networking or RAM).
   - _For the Xbox One it's exactly the same hardware. (\*)_
-- Connects to a PC and runs unsigned code (\*).
+- Connects to a PC and runs development signed code (\*).
 - Can't run retail games (\*).
 
 ---
