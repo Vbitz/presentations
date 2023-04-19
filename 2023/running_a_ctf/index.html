@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Joshua D. Scarsbrook">
+  <title>Running a Capture the Flag Challenge</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js//dist/theme/black.css" id="theme">
+  <style>
+    /**
+    * Dracula Dark theme for reveal.js.
+    * Based on https://draculatheme.com
+    */
+    /**
+    * Dracula colors by Zeno Rocha
+    * https://draculatheme.com/contribute
+    */
+    html * {
+      color-profile: sRGB;
+      rendering-intent: auto;
+    }
+
+    section.has-light-background,
+    section.has-light-background h1,
+    section.has-light-background h2,
+    section.has-light-background h3,
+    section.has-light-background h4,
+    section.has-light-background h5,
+    section.has-light-background h6 {
+      color: #282a36;
+    }
+
+    /*********************************************
+    * GLOBAL STYLES
+    *********************************************/
+    :root {
+      --color-1: #e0e2db;
+      --color-2: #d67ab1;
+      --color-3: #676aa2;
+      --color-4: #72ac9a;
+      --color-5: #0d0c1d;
+
+      --r-background-color: var(--color-5);
+      --r-main-font: -apple-system, BlinkMacSystemFont, avenir next, avenir,
+        segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto,
+        arial, sans-serif;
+      --r-main-font-size: 30px;
+      --r-main-color: var(--color-1);
+      --r-block-margin: 20px;
+      --r-heading-margin: 0 0 20px 0;
+      --r-heading-font: Roboto Mono, monospace;
+      --r-heading-color: var(--color-2);
+      --r-heading-line-height: 1.2;
+      --r-heading-letter-spacing: normal;
+      --r-heading-text-transform: none;
+      --r-heading-text-shadow: none;
+      --r-heading-font-weight: normal;
+      --r-heading1-text-shadow: none;
+      --r-heading1-size: 2.77em;
+      --r-heading2-size: 2.11em;
+      --r-heading3-size: 1.55em;
+      --r-heading4-size: 1em;
+      --r-code-font: Roboto Mono, monospace;
+      --r-link-color: var(--color-4);
+      --r-link-color-dark: var(--color-4);
+      --r-link-color-hover: var(--color-4);
+      --r-selection-background-color: var(--color-5);
+      --r-selection-color: var(--color-5);
+    }
+
+    .reveal-viewport {
+      background: var(--color-5);
+      background-color: var(--r-background-color);
+    }
+
+    .reveal {
+      font-family: var(--r-main-font);
+      font-size: var(--r-main-font-size);
+      font-weight: normal;
+      color: var(--r-main-color);
+    }
+
+    .reveal ::selection {
+      color: var(--r-selection-color);
+      background: var(--r-selection-background-color);
+      text-shadow: none;
+    }
+
+    .reveal ::-moz-selection {
+      color: var(--r-selection-color);
+      background: var(--r-selection-background-color);
+      text-shadow: none;
+    }
+
+    .reveal .slides section,
+    .reveal .slides section > section {
+      line-height: 1.3;
+      font-weight: inherit;
+    }
+
+    /*********************************************
+    * HEADERS
+    *********************************************/
+    .reveal h1,
+    .reveal h2,
+    .reveal h3,
+    .reveal h4,
+    .reveal h5,
+    .reveal h6 {
+      margin: var(--r-heading-margin);
+      color: var(--r-heading-color);
+      font-family: var(--r-heading-font);
+      font-weight: var(--r-heading-font-weight);
+      line-height: var(--r-heading-line-height);
+      letter-spacing: var(--r-heading-letter-spacing);
+      text-transform: var(--r-heading-text-transform);
+      text-shadow: var(--r-heading-text-shadow);
+      word-wrap: break-word;
+    }
+
+    .reveal h1 {
+      font-size: var(--r-heading1-size);
+    }
+
+    .reveal h2 {
+      font-size: var(--r-heading2-size);
+    }
+
+    .reveal h3 {
+      font-size: var(--r-heading3-size);
+    }
+
+    .reveal h4 {
+      font-size: var(--r-heading4-size);
+    }
+
+    .reveal h1 {
+      text-shadow: var(--r-heading1-text-shadow);
+    }
+
+    /*********************************************
+    * OTHER
+    *********************************************/
+    .reveal p {
+      margin: var(--r-block-margin) 0;
+      line-height: 1.3;
+    }
+
+    /* Remove trailing margins after titles */
+    .reveal h1:last-child,
+    .reveal h2:last-child,
+    .reveal h3:last-child,
+    .reveal h4:last-child,
+    .reveal h5:last-child,
+    .reveal h6:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Ensure certain elements are never larger than the slide itself */
+    .reveal img,
+    .reveal video,
+    .reveal iframe {
+      max-width: 95%;
+      max-height: 95%;
+    }
+
+    .reveal strong,
+    .reveal b {
+      font-weight: bold;
+    }
+
+    .reveal em {
+      font-style: italic;
+    }
+
+    .reveal ol,
+    .reveal dl,
+    .reveal ul {
+      display: inline-block;
+      text-align: left;
+      margin: 0 0 0 1em;
+    }
+
+    .reveal ol {
+      list-style-type: decimal;
+    }
+
+    .reveal ul {
+      list-style-type: disc;
+    }
+
+    .reveal ul ul {
+      list-style-type: square;
+    }
+
+    .reveal ul ul ul {
+      list-style-type: circle;
+    }
+
+    .reveal ul ul,
+    .reveal ul ol,
+    .reveal ol ol,
+    .reveal ol ul {
+      display: block;
+      margin-left: 40px;
+    }
+
+    .reveal dt {
+      font-weight: bold;
+    }
+
+    .reveal dd {
+      margin-left: 40px;
+    }
+
+    .reveal blockquote {
+      display: block;
+      position: relative;
+      width: 70%;
+      margin: var(--r-block-margin) auto;
+      padding: 5px;
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .reveal blockquote p:first-child,
+    .reveal blockquote p:last-child {
+      display: inline-block;
+    }
+
+    .reveal q {
+      font-style: italic;
+    }
+
+    .reveal pre {
+      display: block;
+      position: relative;
+      width: 90%;
+      margin: var(--r-block-margin) auto;
+      text-align: left;
+      font-size: 0.55em;
+      font-family: var(--r-code-font);
+      line-height: 1.2em;
+      word-wrap: break-word;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .reveal code {
+      font-family: var(--r-code-font);
+      text-transform: none;
+      tab-size: 2;
+    }
+
+    .reveal pre code {
+      display: block;
+      padding: 5px;
+      overflow: auto;
+      max-height: 400px;
+      word-wrap: normal;
+    }
+
+    .reveal .code-wrapper {
+      white-space: normal;
+    }
+
+    .reveal .code-wrapper code {
+      white-space: pre;
+    }
+
+    .reveal table {
+      margin: auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    .reveal table th {
+      font-weight: bold;
+    }
+
+    .reveal table th,
+    .reveal table td {
+      text-align: left;
+      padding: 0.2em 0.5em 0.2em 0.5em;
+      border-bottom: 1px solid;
+    }
+
+    .reveal table th[align="center"],
+    .reveal table td[align="center"] {
+      text-align: center;
+    }
+
+    .reveal table th[align="right"],
+    .reveal table td[align="right"] {
+      text-align: right;
+    }
+
+    .reveal table tbody tr:last-child th,
+    .reveal table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .reveal sup {
+      vertical-align: super;
+      font-size: smaller;
+    }
+
+    .reveal sub {
+      vertical-align: sub;
+      font-size: smaller;
+    }
+
+    .reveal small {
+      display: inline-block;
+      font-size: 0.6em;
+      line-height: 1.2em;
+      vertical-align: top;
+    }
+
+    .reveal small * {
+      vertical-align: top;
+    }
+
+    .reveal img {
+      margin: var(--r-block-margin) 0;
+    }
+
+    /*********************************************
+    * LINKS
+    *********************************************/
+    .reveal a {
+      color: var(--r-link-color);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .reveal a:hover {
+      color: var(--r-link-color-hover);
+      text-shadow: none;
+      border: none;
+    }
+
+    .reveal .roll span:after {
+      color: #fff;
+      background: var(--r-link-color-dark);
+    }
+
+    /*********************************************
+    * Frame helper
+    *********************************************/
+    .reveal .r-frame {
+      border: 4px solid var(--r-main-color);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .reveal a .r-frame {
+      transition: all 0.15s linear;
+    }
+
+    .reveal a:hover .r-frame {
+      border-color: var(--r-link-color);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+    }
+
+    /*********************************************
+    * NAVIGATION CONTROLS
+    *********************************************/
+    .reveal .controls {
+      color: var(--r-link-color);
+    }
+
+    /*********************************************
+    * PROGRESS BAR
+    *********************************************/
+    .reveal .progress {
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--r-link-color);
+    }
+
+    /*********************************************
+    * PRINT BACKGROUND
+    *********************************************/
+    @media print {
+      .backgrounds {
+        background-color: var(--r-background-color);
+      }
+    }
+    :root {
+      --r-bold-color: var(--color-3);
+      --r-italic-color: var(--color-4);
+      --r-inline-code-color: var(--color-2);
+      --r-list-bullet-color: var(--color-2);
+    }
+
+    .reveal strong,
+    .reveal b {
+      color: var(--r-bold-color);
+    }
+
+    .reveal em,
+    .reveal i,
+    .reveal blockquote {
+      color: var(--r-italic-color);
+    }
+
+    .reveal code {
+      color: var(--r-inline-code-color);
+    }
+
+    .reveal ul {
+      list-style: none;
+    }
+
+    .reveal ul li::before {
+      content: "•";
+      color: var(--r-list-bullet-color);
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+
+    .reveal ol {
+      list-style: none;
+      counter-reset: li;
+    }
+
+    .reveal ol li::before {
+      content: counter(li) ".";
+      color: var(--r-list-bullet-color);
+      display: inline-block;
+      width: 2em;
+      margin-left: -2.5em;
+      margin-right: 0.5em;
+      text-align: right;
+    }
+
+    .reveal ol li {
+      counter-increment: li;
+    }
+
+    .reveal .smaller {
+      font-size: 70%;
+      text-align: left;
+    }
+
+    .reveal .footnotes {
+      position: fixed !important;
+      bottom: 0;
+      max-height: 100px;
+    }
+
+    .title {
+    }
+
+    .subtitle {
+    }
+
+    .author {
+    }
+
+    .date {
+    }
+
+    .reveal .slide-background-content {
+      filter: blur(10px) saturate(0.7) brightness(0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Running a Capture the Flag Challenge</h1>
+  <p class="subtitle">It’s like making a Cyber Security Game 😁</p>
+  <p class="author">Joshua D. Scarsbrook</p>
+  <p class="date">April 19th, 2023</p>
+</section>
+
+<section class="slide level2">
+
+<h3
+id="joshuajoshua-pc3-whoami"><code>joshua@joshua-pc3 $ whoami</code></h3>
+<p>Joshua Scarsbrook</p>
+<p>Research Officer/PhD Student at the University of Queensland</p>
+<p>Researching Applied Cyber Security and Cyber Security in
+Education</p>
+<p>Interested in Operating Systems and Embedded Hardware</p>
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li>Designing a CTF</li>
+<li>Designing Challenges</li>
+<li>Setting up Infrastructure</li>
+</ul>
+</section>
+<section id="reasons-to-run-a-ctf" class="slide level2">
+<h2>Reasons to run a CTF</h2>
+<ul>
+<li>Training</li>
+<li>Selection</li>
+<li>Engagement</li>
+<li>Research</li>
+</ul>
+</section>
+<section id="consider-your-audience" class="slide level2">
+<h2>Consider your Audience</h2>
+<ul>
+<li>Who are they?</li>
+<li>What experience level?</li>
+<li>What hardware will they have?</li>
+<li>How long is the CTF?</li>
+</ul>
+</section>
+<section id="challenge-categories" class="slide level2">
+<h2>Challenge Categories</h2>
+<h3 id="main-ones">Main Ones</h3>
+<ul>
+<li>Reverse Engineering</li>
+<li>Binary Exploitation</li>
+<li>Web Application Security</li>
+<li>Cryptography</li>
+<li>Forensics</li>
+</ul>
+<h3 id="others">Others</h3>
+<ul>
+<li>OSINT (Open Source Intelligence)</li>
+<li>Mobile Applications</li>
+<li>Cloud</li>
+<li>Hardware</li>
+<li>Cryptocurrencies / Smart Contracts</li>
+</ul>
+</section>
+<section id="challenge-ideas-difficulty-level" class="slide level2">
+<h2>Challenge Ideas / Difficulty Level</h2>
+<ul>
+<li>These are not hard boundaries.</li>
+<li>A badly designed Hard challenge can turn into a Easy challenge.</li>
+<li>Just like a badly designed Easy challenge can turn into a h4sh
+challenge.</li>
+<li>Keep in mind the infrastructure and coding.
+<ul>
+<li>Hosting a VM for each participant is not easy to get right.</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="beginner">Beginner</h3>
+<ul>
+<li>Web Exploitation
+<ul>
+<li>SQL Injection.</li>
+<li>Cross-site Scripting.</li>
+</ul></li>
+<li>Forensics
+<ul>
+<li>File Metadata</li>
+</ul></li>
+<li>Cryptography
+<ul>
+<li>Caesar Cipher</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="intermediate">Intermediate</h3>
+<ul>
+<li>Basic Binary Exploitation
+<ul>
+<li>Disable modern mitigation’s.</li>
+<li>Buffer Overflows.</li>
+</ul></li>
+<li>Reverse Engineering
+<ul>
+<li>C / Golang / Rust / C#</li>
+</ul></li>
+<li>Forensics
+<ul>
+<li>Disk Image forensics</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="hard">Hard</h3>
+<ul>
+<li>Advanced Binary Exploitation
+<ul>
+<li>ROP Chains</li>
+<li>Static/Dynamic Analysis</li>
+</ul></li>
+<li>Forensics
+<ul>
+<li>Memory forensics</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="h4sh"><code>h4sh</code></h3>
+<ul>
+<li>Linux Kernel Exploits</li>
+<li>Browser Exploits</li>
+<li>Custom Operating Systems</li>
+<li>BIOS Exploits</li>
+<li>Satellites</li>
+</ul>
+</section>
+<section id="challenge-design" class="slide level2">
+<h2>Challenge Design</h2>
+<ul>
+<li>Learn about game design. A CTF is just a domain-specific game.</li>
+</ul>
+</section>
+<section id="writing-a-challenge" class="slide level2">
+<h2>Writing a Challenge</h2>
+<ul>
+<li>Most challenges are written in JavaScript, Python, or C.
+<ul>
+<li>This is because most people are familiar with coding in these
+languages.</li>
+<li>Sometimes you want to use a more exotic language.</li>
+</ul></li>
+<li>We’ll be writing a easy web challenge in Python.</li>
+</ul>
+</section>
+<section id="infrastructure-overview" class="slide level2">
+<h2>Infrastructure Overview</h2>
+<ul>
+<li>We’re starting with 2 Ubuntu VMs.</li>
+<li>Where they’re hosted doesn’t matter too much.</li>
+<li>The installation is already done and now we’ll setup the software.
+<ul>
+<li>The install took about an hour.</li>
+</ul></li>
+</ul>
+</section>
+<section id="setting-up-tailscale" class="slide level2">
+<h2>Setting up Tailscale</h2>
+<p><a
+href="https://tailscale.com/download/linux">https://tailscale.com/download/linux</a></p>
+<p><code>curl -fsSL https://tailscale.com/install.sh | sh</code></p>
+<p><em>Manual Instructions also exist</em></p>
+<p>Connect over SSH.</p>
+</section>
+<section id="setting-up-ctfd-using-docker-compose" class="slide level2">
+<h2>Setting up CTFd using Docker Compose</h2>
+<ul>
+<li><a
+href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a>
+<ul>
+<li>Don’t install Docker Desktop</li>
+<li>Don’t install from package repos or snap (can be an old
+version)</li>
+</ul></li>
+<li><a
+href="https://docs.docker.com/engine/install/ubuntu/">https://docs.ctfd.io/docs/deployment/installation</a></li>
+</ul>
+</section>
+<section id="using-tailscale-funnel" class="slide level2">
+<h2>Using Tailscale Funnel</h2>
+<p>It configures HTTPS for you and lets you connect to any machine on
+your Tailnet over the internet.</p>
+<p><code>tailscale serve https / http://127.0.0.1:3000</code></p>
+</section>
+<section id="adding-the-challenge" class="slide level2">
+<h2>Adding the Challenge</h2>
+<ul>
+<li>Setup Tailscale on the challenge machine.</li>
+<li>Setup Docker on the challenge machine.</li>
+<li>Run the challenge using Docker.</li>
+<li>Run <code>tailscale serve</code>.</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
