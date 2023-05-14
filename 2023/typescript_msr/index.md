@@ -28,8 +28,7 @@ How quickly do developers adopt new language versions?
    - **1,325,810** total commits.
 3. Filter for commits in the time period of interest.
    - Between **January 1st 2020** and **December 31st 2022** inclusive.
-4. Analyze each _TypeScript_ file in each commit and look for usage of features.
-   - Done by looking at _Abstract Syntax Tree_.
+4. Analyze each _TypeScript_ file in each commit and look for AST nodes corresponding to features.
 
 # Research Question 1
 
