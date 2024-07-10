@@ -1,13 +1,14 @@
 ---
 author: Joshua D. Scarsbrook - The University of Queensland
-title: TinyRange
-subtitle: "TinyRange: Next-generation Virtualization for Cyber and Beyond"
+title: "TinyRange: Next-generation Virtualization for Cyber and Beyond"
 date: July 10th, 2024
 ---
 
 # Slides
 
 [https://vbitz.github.io/presentations/2024/tinyrange2](https://vbitz.github.io/presentations/2023/tinyrange)
+
+<img src="./slides_qr.svg" width=300 height=300>
 
 # $ whoami
 
@@ -29,13 +30,7 @@ Working in the `Computational Imaging Group` of `EECS`
 
 **Long Term Goal**: Make running and building _any_ software effortless for all modern hardware.
 
-**Where am I today?**: Super fast and easy `Linux` virtual machines.
-
-# This time last year.
-
-- TinyRange was closed source.
-- The biggest limiting factor was transferring files into VMs.
-- Adhoc system for defining virtual machines and running software.
+**Where are we today?**: Super fast and easy `Linux` virtual machines.
 
 # `TinyRange` is Open Source!
 
@@ -43,10 +38,17 @@ Working in the `Computational Imaging Group` of `EECS`
 
 **Source Code**: [https://github.com/tinyrange/tinyrange](https://github.com/tinyrange/tinyrange/)
 
-# What else is new?
+# `Virtual Machines` vs. `Containers`
 
-- Virtual `ext4` Filesystems!
-- New scriptable build system for writing package managers.
+- **Virtual Machines** emulate the entire computing stack down to the CPU. You can run any operating system in a virtual machine.
+- **Containers** share the kernel and hardware resources with the host operating system. They are applications given a different view of the same operating system.
+- The biggest limiting factor for virtual machines is how you build them.
+
+# How do we get files into `Virtual Machines`?
+
+- **Block Devices:** Universal support but slow to build.
+- **Network Filesystems:** Moderate support with moderate speed (e.g. `SMB`, `NFS`, `sshfs`).
+- **VM Filesystems:** Limited support but very fast (e.g. `virtio-fs`, `virtio-9p`, Shared Folders).
 
 # Virtual `ext4` Filesystems.
 
@@ -57,31 +59,34 @@ Working in the `Computational Imaging Group` of `EECS`
 # How?
 
 - A custom language that defines structures with safe byte-level indexing.
+
+```
+type DirEntry2 struct {
+    inode               u32_le  // Number of the inode that this directory points to.
+    rec_len             u16_le  // Length of this directory entry.
+    name_len            u8      // Length of the file name.
+    file_type           u8      // File type code, see ftype table below.
+}
+```
+
 - Virtual memory mapping emulated in Userspace with byte-level granularity.
-
-# Scriptable Build System
-
-- Not a new package manager. A new way to write package managers.
-- Integrates with `TinyRange` as a virtualization host.
-- Able to build a full `Alpine Linux` system without
-
-# What is the Computational Imaging Group?
-
-- Headed by Dr. Steffen Bollmann
-- Research into `MRI` Imaging with a focus on reproducible science.
-- Works on [NeuroDesk](https://www.neurodesk.org/) among other projects.
-
-# NeuroDesk
-
-- ~100 Neuroimaging tools distributed publicly with `Docker`, `Singularity`, `CVMFS`.
-- Users all over the world.
-- Currently built with generated `Dockerfiles`.
+- ~2000 lines of `Go` to implement `ext4` support.
 
 # TinyRange Research Gaps
 
 1. **Virtualization:** Currently using QEMU. A better replacement could enable running all this in a web browser.
 2. **Bootloader:** Currently ties us to Linux.
 2. **Alternate Guest Operating Systems:** Needs a driver for the filesystem and a bootloader.
+
+# What am I using this for?
+
+# NeuroDesk
+
+- Headed by Dr. Steffen Bollmann with many other contributors.
+- Currently built with generated `Dockerfiles` and two containers using TinyRange.
+- Hoping to use TinyRange in the future.
+- ~100 Neuroimaging tools distributed publicly with `Docker`, `Singularity`, `CVMFS`.
+- Users all over the world.
 
 # Thanks for Listening
 

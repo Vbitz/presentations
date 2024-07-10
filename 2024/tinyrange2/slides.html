@@ -24,15 +24,15 @@
     --secondary-font: 'Source Code Pro', monospace;
     --header-font: 'Merriweather', serif;
 
-    --white: hsl(0, 0%, 99%);
-    --aztec: hsl(0, 0%, 10%);
-    --fuchsia-purple: hsl(326, 80%, 50%);
-    --chantilly: hsl(327, 60%, 87%);
-    --spring-frost: hsl(85, 60%, 50%);
-    --neon-green: hsl(116, 60%, 50%);
-    --spring-green: hsl(145, 60%, 50%);
-    --bright-turquoise: hsl(176, 60%, 50%);
-    --blue-de-france: hsl(205, 60%, 50%);
+    --white: #f5f0ec;
+    --aztec: #272625;
+    --fuchsia-purple: hsl(272, 52%, 17%);
+    --chantilly: hsl(275, 23%, 79%);
+    --spring-frost: hsl(185, 53%, 39%);
+    --neon-green: hsl(30, 49%, 39%);
+    --spring-green: hsl(346, 57%, 34%);
+    --bright-turquoise: hsl(286, 61%, 36%);
+    --blue-de-france: hsl(123, 40%, 34%);
 
     --r-background-color: var(--white);
     --r-main-font: var(--global-font);
@@ -40,7 +40,7 @@
     --r-main-color: var(--aztec);
     --r-block-margin: 20px;
     --r-heading-margin: 0 0 20px 0;
-    --r-heading-font: Roboto Mono, monospace;
+    --r-heading-font: var(--header-font);
     --r-heading-color: var(--fuchsia-purple);
     --r-heading-line-height: 1.2;
     --r-heading-letter-spacing: normal;
@@ -48,11 +48,11 @@
     --r-heading-text-shadow: none;
     --r-heading-font-weight: normal;
     --r-heading1-text-shadow: none;
-    --r-heading1-size: 1.9em;
-    --r-heading2-size: 1.7em;
-    --r-heading3-size: 1.4em;
+    --r-heading1-size: 1.6em;
+    --r-heading2-size: 1.4em;
+    --r-heading3-size: 1.2em;
     --r-heading4-size: 1em;
-    --r-code-font: Roboto Mono, monospace;
+    --r-code-font: var(--secondary-font);
     --r-link-color: var(--spring-green);
     --r-link-color-dark: var(--spring-green);
     --r-link-color-hover: var(--spring-green);
@@ -473,15 +473,15 @@
     content: "TinyRange: Next-generation Virtualization for Cyber and Beyond";
     color: var(--fuchsia-purple);
     position: relative;
-    top: -37px;
-    font-size: 0.7em;
+    top: -33px;
+    font-size: 0.4em;
   }
 
   .reveal .slide-background-content {
-    margin: 15px;
-    margin-top: 40px;
-    width: calc(100% - 30px);
-    height: calc(100% - 55px);
+    margin: 10px;
+    margin-top: 25px;
+    width: calc(100% - 20px);
+    height: calc(100% - 35px);
     border-radius: 10px;
     background-color: var(--white);
   }
