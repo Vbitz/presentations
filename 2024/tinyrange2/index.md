@@ -1,7 +1,7 @@
 ---
 author: Joshua D. Scarsbrook - The University of Queensland
 title: "TinyRange: Next-generation Virtualization for Cyber and Beyond"
-date: July 10th, 2024
+date: July 11th, 2024
 ---
 
 # Slides
@@ -28,7 +28,7 @@ Working in the `Computational Imaging Group` of `EECS`
 
 > Next-generation Virtualization for Cyber and Beyond
 
-**Long Term Goal**: Make running and building _any_ software effortless for all modern hardware.
+**Long Term Goal**: Make running and building _any_ software effortless on all modern hardware.
 
 **Where are we today?**: Super fast and easy `Linux` virtual machines.
 
@@ -46,7 +46,7 @@ Working in the `Computational Imaging Group` of `EECS`
 
 # How do we get files into `Virtual Machines`?
 
-- **Block Devices:** Universal support but slow to build.
+- **Block Devices:** Universal support but slow and hard to build.
 - **Network Filesystems:** Moderate support with moderate speed (e.g. `SMB`, `NFS`, `sshfs`).
 - **VM Filesystems:** Limited support but very fast (e.g. `virtio-fs`, `virtio-9p`, Shared Folders).
 
@@ -79,7 +79,7 @@ type DirEntry2 struct {
 2. **Bootloader:** Currently ties us to Linux.
 2. **Alternate Guest Operating Systems:** Needs a driver for the filesystem and a bootloader.
 
-# Scripting
+# Scripting Preview 
 
 ```py
 make_vm([
