@@ -24,6 +24,19 @@ Interested in...
 
 Working in the `Computational Imaging Group` of `EECS`
 
+# `Virtual Machines` vs. `Containers`
+
+- **Virtual Machines:** Isolated at the CPU Level. Emulates real hardware or specialized virtual hardware.
+- **Containers:** Isolated at the Operating System Level. Fast, easy to build, and efferent with resources.
+
+The biggest limiting factor for virtual machines is how you build them.
+
+# How do we get files into `Virtual Machines`?
+
+- **Block Devices:** Direct emulation of hardware. Fast and well supported but slow to build.
+- **Network Filesystems:** Moderate support and moderate speed (e.g. `SMB`, `NFS`, `sshfs`).
+- **VM Filesystems:** Highly specialized and very fast (e.g. `virtio-fs`, `virtio-9p`).
+
 # What is TinyRange?
 
 > Next-generation Virtualization for Cyber and Beyond
@@ -37,18 +50,6 @@ Working in the `Computational Imaging Group` of `EECS`
 **License**: Apache License 2.0
 
 **Source Code**: [https://github.com/tinyrange/tinyrange](https://github.com/tinyrange/tinyrange/)
-
-# `Virtual Machines` vs. `Containers`
-
-- **Virtual Machines** emulate the entire computing stack down to the CPU. You can run any operating system in a virtual machine.
-- **Containers** share the kernel and hardware resources with the host operating system. They are applications given a different view of the same operating system.
-- The biggest limiting factor for virtual machines is how you build them.
-
-# How do we get files into `Virtual Machines`?
-
-- **Block Devices:** Universal support but slow and hard to build.
-- **Network Filesystems:** Moderate support with moderate speed (e.g. `SMB`, `NFS`, `sshfs`).
-- **VM Filesystems:** Limited support but very fast (e.g. `virtio-fs`, `virtio-9p`, Shared Folders).
 
 # Virtual `ext4` Filesystems.
 
@@ -72,12 +73,19 @@ type DirEntry2 struct {
 - Virtual memory mapping emulated in Userspace with byte-level granularity.
 - ~2000 lines of `Go` to implement `ext4` support.
 
+# Benchmarks
+
+| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+|:---|---:|---:|---:|---:|
+| `tinyrange` | 376.6 ± 1.8 | 372.6 | 379.2 | 2.26 ± 0.20 |
+| `docker` | 220.8 ± 16.0 | 199.1 | 259.6 | 1.33 ± 0.15 |
+| `podman` | 166.3 ± 14.6 | 145.4 | 200.9 | 1.00 |
+
 # TinyRange Research Gaps
 
 1. **Software Installation:** Now we can get files into a virtual machine how do we get software installed?
-1. **Virtualization:** Currently using QEMU. A better replacement could enable running all this in a web browser.
-2. **Bootloader:** Currently ties us to Linux.
-2. **Alternate Guest Operating Systems:** Needs a driver for the filesystem and a bootloader.
+2. **Virtualization:** Currently using QEMU. A better replacement could enable running all this in a web browser.
+3. **Alternate Guest Operating Systems:** Needs a driver for the filesystem and a bootloader.
 
 # Scripting Preview 
 

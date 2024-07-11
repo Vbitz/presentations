@@ -618,6 +618,33 @@ href="mailto:j.scarsbrook@uq.edu.au">j.scarsbrook@uq.edu.au</a>)</p>
 <code>EECS</code></p>
 </section>
 
+<section id="virtual-machines-vs.-containers"
+class="title-slide slide level1">
+<h1><code>Virtual Machines</code> vs. <code>Containers</code></h1>
+<ul>
+<li><strong>Virtual Machines:</strong> Isolated at the CPU Level.
+Emulates real hardware or specialized virtual hardware.</li>
+<li><strong>Containers:</strong> Isolated at the Operating System Level.
+Fast, easy to build, and efferent with resources.</li>
+</ul>
+<p>The biggest limiting factor for virtual machines is how you build
+them.</p>
+</section>
+
+<section id="how-do-we-get-files-into-virtual-machines"
+class="title-slide slide level1">
+<h1>How do we get files into <code>Virtual Machines</code>?</h1>
+<ul>
+<li><strong>Block Devices:</strong> Direct emulation of hardware. Fast
+and well supported but slow to build.</li>
+<li><strong>Network Filesystems:</strong> Moderate support and moderate
+speed (e.g. <code>SMB</code>, <code>NFS</code>,
+<code>sshfs</code>).</li>
+<li><strong>VM Filesystems:</strong> Highly specialized and very fast
+(e.g. <code>virtio-fs</code>, <code>virtio-9p</code>).</li>
+</ul>
+</section>
+
 <section id="what-is-tinyrange" class="title-slide slide level1">
 <h1>What is TinyRange?</h1>
 <blockquote>
@@ -634,36 +661,6 @@ href="mailto:j.scarsbrook@uq.edu.au">j.scarsbrook@uq.edu.au</a>)</p>
 <p><strong>License</strong>: Apache License 2.0</p>
 <p><strong>Source Code</strong>: <a
 href="https://github.com/tinyrange/tinyrange/">https://github.com/tinyrange/tinyrange</a></p>
-</section>
-
-<section id="virtual-machines-vs.-containers"
-class="title-slide slide level1">
-<h1><code>Virtual Machines</code> vs. <code>Containers</code></h1>
-<ul>
-<li><strong>Virtual Machines</strong> emulate the entire computing stack
-down to the CPU. You can run any operating system in a virtual
-machine.</li>
-<li><strong>Containers</strong> share the kernel and hardware resources
-with the host operating system. They are applications given a different
-view of the same operating system.</li>
-<li>The biggest limiting factor for virtual machines is how you build
-them.</li>
-</ul>
-</section>
-
-<section id="how-do-we-get-files-into-virtual-machines"
-class="title-slide slide level1">
-<h1>How do we get files into <code>Virtual Machines</code>?</h1>
-<ul>
-<li><strong>Block Devices:</strong> Universal support but slow and hard
-to build.</li>
-<li><strong>Network Filesystems:</strong> Moderate support with moderate
-speed (e.g. <code>SMB</code>, <code>NFS</code>,
-<code>sshfs</code>).</li>
-<li><strong>VM Filesystems:</strong> Limited support but very fast
-(e.g. <code>virtio-fs</code>, <code>virtio-9p</code>, Shared
-Folders).</li>
-</ul>
 </section>
 
 <section id="virtual-ext4-filesystems."
@@ -697,6 +694,44 @@ support.</li>
 </ul>
 </section>
 
+<section id="benchmarks" class="title-slide slide level1">
+<h1>Benchmarks</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: right;">Mean [ms]</th>
+<th style="text-align: right;">Min [ms]</th>
+<th style="text-align: right;">Max [ms]</th>
+<th style="text-align: right;">Relative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>tinyrange</code></td>
+<td style="text-align: right;">376.6 ± 1.8</td>
+<td style="text-align: right;">372.6</td>
+<td style="text-align: right;">379.2</td>
+<td style="text-align: right;">2.26 ± 0.20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>docker</code></td>
+<td style="text-align: right;">220.8 ± 16.0</td>
+<td style="text-align: right;">199.1</td>
+<td style="text-align: right;">259.6</td>
+<td style="text-align: right;">1.33 ± 0.15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>podman</code></td>
+<td style="text-align: right;">166.3 ± 14.6</td>
+<td style="text-align: right;">145.4</td>
+<td style="text-align: right;">200.9</td>
+<td style="text-align: right;">1.00</td>
+</tr>
+</tbody>
+</table>
+</section>
+
 <section id="tinyrange-research-gaps" class="title-slide slide level1">
 <h1>TinyRange Research Gaps</h1>
 <ol type="1">
@@ -704,7 +739,6 @@ support.</li>
 virtual machine how do we get software installed?</li>
 <li><strong>Virtualization:</strong> Currently using QEMU. A better
 replacement could enable running all this in a web browser.</li>
-<li><strong>Bootloader:</strong> Currently ties us to Linux.</li>
 <li><strong>Alternate Guest Operating Systems:</strong> Needs a driver
 for the filesystem and a bootloader.</li>
 </ol>
