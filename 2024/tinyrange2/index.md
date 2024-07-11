@@ -74,9 +74,34 @@ type DirEntry2 struct {
 
 # TinyRange Research Gaps
 
+1. **Software Installation:** Now we can get files into a virtual machine how do we get software installed?
 1. **Virtualization:** Currently using QEMU. A better replacement could enable running all this in a web browser.
 2. **Bootloader:** Currently ties us to Linux.
 2. **Alternate Guest Operating Systems:** Needs a driver for the filesystem and a bootloader.
+
+# Scripting
+
+```py
+make_vm([
+    define.plan(
+        builder = "alpine@3.20",
+        packages = [
+            query("ifupdown-ng"), query("busybox"), query("busybox-binsh"),
+            query("alpine-baselayout"), query("openrc"), query("docker"),
+            query("docker-openrc"), query("hyperfine"),
+        ],
+        tags = ["level3"],
+    ),
+    vm_modfs,
+    directive.add_file("/run/openrc/softlevel", file("")),
+    directive.add_file("/etc/network/interfaces", file("")),
+    directive.run_command("openrc"),
+    directive.run_command("service docker start"),
+    directive.run_command("""while (! docker version > /dev/null 2>&1); do
+  sleep 0.1
+done""" ),
+])
+```
 
 # What am I using this for?
 
